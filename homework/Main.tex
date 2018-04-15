@@ -1,0 +1,147 @@
+\documentclass[11pt,american,czech]{article}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm,headheight=0.8cm,headsep=1cm,footskip=0.5cm}
+\setcounter{secnumdepth}{3}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{enumerate} %roman enumiration
+\usepackage{threeparttable}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{subfigure}
+\usepackage{array}
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Palatino font
+
+
+\pagenumbering{arabic}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Algorithms
+% Define a \HEADER{Title} ... \ENDHEADER block
+\newcommand{\HEADER}[1]{\ALC@it\underline{\textsc{#1}}\begin{ALC@g}}
+	\newcommand{\ENDHEADER}{\end{ALC@g}}
+\renewcommand*{\ALG@name}{Algoritmus}
+\algsetup{indent=2em} 
+\renewcommand{\algorithmiccomment}[1]{\hspace{2em}// #1} 
+\makeatother
+
+%% Use Times New Roman font for text and Belleek font for math
+%% Please make sure that the 'esint' package is turned off in the
+%% 'Math options' page.
+\usepackage[varg]{txfonts}
+
+
+%% Indent even the first paragraph in each section
+\usepackage{indentfirst}
+
+% completely avoid orphans (first lines of a new paragraph on the bottom of a page)
+\clubpenalty=9500
+
+% completely avoid widows (last lines of paragraph on a new page)
+\widowpenalty=9500
+
+% disable hyphenation of acronyms
+\hyphenation{CDFA HARDI HiPPIES IKEM InterTrack MEGIDDO MIMD MPFA DICOM ASCLEPIOS MedInria}
+
+%%---------------------------------------------------------------------
+
+%% Print out all vectors in bold type instead of printing an arrow above them
+%%\renewcommand{\vec}[1]{\boldsymbol{#1}}
+
+% Replace standard \cite by the parenthetical variant \citep
+%\renewcommand{\cite}{\citep}
+
+\makeatother
+%\pagestyle{empty} %turns off page numbering
+\usepackage{babel}
+\newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
+\newcommand*\midpoint[1]{\overline{#1}}
+
+\begin{document}
+\selectlanguage{american}
+\def\documentdate{...}
+
+
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for horizontal lines, change thickness here
+	\center % Centre everything on the page	
+	
+	\textsc{\LARGE FNSPE CTU}\\[1.5cm] % Main heading such as the name of your university/college
+	\vfill
+	
+	\textsc{\Large Dynamic Decision Making}\\[0.5cm] % Major heading such as course name
+	\textsc{\large Seminar Paper}\\[0.5cm] % Minor heading such as course title
+	\HRule\\[0.4cm]
+	{\huge\bfseries Minority Game}\\
+	{\LARGE\bfseries From the Dynamic Decision Making Perspective}\\[0.4cm] % Title of your document
+	\HRule\\[1.5cm]
+	{\large\textit{Author}}\\
+	Vladislav \textsc{Belov}\\
+	\vfill\vfill\vfill\vfill\vfill\vfill\vfill % Position the date 3/4 down the remaining page
+	{\large\today} % Date, change the \today to a set date if you want to be precise
+	
+	%------------------------------------------------
+	%	Logo
+	%------------------------------------------------
+	
+%	\vfill\vfill
+%	\includegraphics[width=0.2\textwidth]{Images/TITLE/fjfi}\\[1cm] % Include a department/university logo - this will require the graphicx package
+%	
+	%----------------------------------------------------------------------------------------
+	
+	\vfill % Push the date up 1/4 of the remaining page
+	
+\end{titlepage}
+
+%\tableofcontents
+%\newpage{}
+
+\section{Introduction}\label{sec:introduction}
+
+In the following seminar paper the Minority Game Paper is going to be discussed. In the next section we will define the general mathematical model of the Minority Game. Afterwards, agent Q-learning and Roth-Erev learning will be introduced. Within the scope of this work the implementation was performed and its results will be presented in some section. 
+The system MG describes originates from the El Farol Bar Problem which was introduced by the economist W.B. Arthur [ref], it goes as follows: every Thursday the population of Santa Fe has a desire to visit the bar - if 60+ \%  of people come to the bar, then it is considered to be overcrowded, so it is no fun there, if less, then it is fun there and those who stayed at home are at a loss. Therefore, it can be easily seen, that the minority wins in games of El Farol Bar Problem type, that is the reason why does the model has such name. Nowadays this model is used frequently in Finance, Network Analysis, even Biology, etc.
+
+\section{Mathematical Model of the Minority Game}
+
+Firstly, consider an odd $N=2k-1$, $k=1,2,\dots$, number of agents participating in the game. At each time step $t=1,2,\dots$ each agent has to make a decision whether to perform an action $+1$ (e.g. go to the bar, sell an asset on the market) or $-1$ (e.g. stay at home, buy an asset on the market). Formally designated $\forall i\in\{1,2,\dots,N\}$:
+
+\begin{equation}
+a_{i}(t)=\pm 1
+\end{equation}
+
+In order to study game dynamics a special parameter called \textit{total action} was introduced: 
+
+\begin{equation}
+A(t)=\sum_{i=1}^{N}a_{i}(t), \forall t\in\{1,2,\dots\},
+\end{equation}
+
+\noindent
+which is basically the sum of actions performed by every agent at a given game round.
+
+\medskip
+
+After each game round the outcome is disclosed to each of the agents: as soon as the round is finished, everyone gets to know what the winning action was. This action $W(t+1)$ ($t+1$ is used to specify, that this information is available at a time step $t+1$) is determined by a simple rule:
+
+\begin{itemize}
+\item $A(t)>0$ $\implies$ the action $-1$ was victorious;
+\item $A(t)<0$ $\implies$ the action $+1$ was victorious;
+\item $A(t)=0$ will never occur due to the oddness of $N$.
+\end{itemize} 
+
+
+Strategies, memory
+
+\newpage{}
+
+\bibliography{bib/Benes2017,bib/MMC}
+
+%\bibliographystyle{plain}
+\bibliographystyle{alpha}
+
+\end{document}
