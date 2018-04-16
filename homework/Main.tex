@@ -1,4 +1,4 @@
-\documentclass[11pt,american,czech]{article}
+\documentclass[12pt,american,czech]{article}
 \usepackage[a4paper]{geometry}
 \geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm,headheight=0.8cm,headsep=1cm,footskip=0.5cm}
 \setcounter{secnumdepth}{3}
@@ -104,8 +104,11 @@
 
 \section{Introduction}\label{sec:introduction}
 
-In the following seminar paper the Minority Game Paper is going to be discussed. In the next section we will define the general mathematical model of the Minority Game. Afterwards, agent Q-learning and Roth-Erev learning will be introduced. Within the scope of this work the implementation was performed and its results will be presented in some section. 
-The system MG describes originates from the El Farol Bar Problem which was introduced by the economist W.B. Arthur [ref], it goes as follows: every Thursday the population of Santa Fe has a desire to visit the bar - if 60+ \%  of people come to the bar, then it is considered to be overcrowded, so it is no fun there, if less, then it is fun there and those who stayed at home are at a loss. Therefore, it can be easily seen, that the minority wins in games of El Farol Bar Problem type, that is the reason why does the model has such name. Nowadays this model is used frequently in Finance, Network Analysis, even Biology, etc.
+In the following seminar paper the Minority Game is going to be discussed. In the next section we will define the general mathematical model of the Minority Game. Afterwards, agent Q-learning and Roth-Erev learning will be introduced. Within the scope of this work the implementation was performed and its results will be presented in some section.
+
+\medskip
+ 
+The system the Minority Game describes originates from the El Farol Bar Problem which was introduced by the economist W.B. Arthur [ref]. It goes as follows: every Thursday the population of Santa Fe has a desire to visit the bar: if more of 60 \% of people come to the bar, then it is considered to be overcrowded, so it is no fun there; if less, then the visit is pleasant and those who stayed at home are at a loss. Therefore, it can be easily seen, that the minority wins in games of El Farol Bar Problem type, that is the reason why the model has such a name. Nowadays this model is used frequently in Finance, Network Analysis, Biology, etc.
 
 \section{Mathematical Model of the Minority Game}
 
@@ -151,7 +154,7 @@ It can be easily seen, that in total $2^{m}$ possible recent histories exist, th
 
 \medskip
 
-At the beginning of the game each agent gets a fixed number of strategies. For any fixed $m$ a \textit{strategy} is a mapping $\pi:(0,1,\dots,2^m-1)\mapsto\{-1,1\}^{2^{m}}$ (all possible outcomes are mapped to respective actions, e.g. see Table~\ref{tab:strategy_table_example}). The construction of such mapping implies, that agents are able to get from $0$ to $2^{2^{m}}$ strategies. The action/decision of agent $i$ with respect to recent history $\mu(t)$ using the strategy $\pi$ will be denoted as $\pi_{i}(\mu(t))$, e.g. if agent $i$ uses the strategy from Table~\ref{tab:strategy_table_example} when recent history is $101$, then $\pi_{i}(5)= -1$.
+At the beginning of the game each agent gets a fixed number of strategies. For any fixed $m$ a \textit{strategy} is a mapping $\pi:(0,1,\dots,2^m-1)\mapsto\{-1,1\}^{2^{m}}$ (all possible outcomes are mapped to respective actions, e.g. see Table~\ref{tab:strategy_table_example}). The construction of such mapping implies, that agents are able to get from $0$ to $2^{2^{m}}$ strategies. The set of strategies available to agent $i\in\{1,2,\dots,N\}$ will be called \text{agent's strategic portfolio} and denoted as $\mathcal{P}_{i}$. The action/decision of agent $i$ with respect to recent history $\mu(t)$ using the strategy $\pi$ will be denoted as $\pi_{i}(\mu(t))$, e.g. if agent $i$ uses the strategy from Table~\ref{tab:strategy_table_example} when recent history is $101$, then $\pi_{i}(5)= -1$.
 
 \begin{table}
 	\centering
@@ -178,7 +181,93 @@ Not the question arises: how to model the process of decision making? In the fol
 
 \section{Learning in the Minority Game}
 
-To begin, we will try to describe the Minority Game in a more formal way. 
+To begin, we will try to describe the Minority Game in a more general way. It is a complex system where agents need memory to make an optimal decision and not all relevant portions of the environment can be observed - we are dealing with partially observable, stochastic, sequential, dynamic, discrete, multi-agent environment. Depending on the learning mechanism, the set of states can be defined differently. Here basic ideas of the MG representation as MDP will be highlighted and some other SHIT DONE.
+
+Let $(\mathcal{S},\mathcal{A},\mathcal{T},\mathcal{R})$ be a Markov Decision Process representing the Minority Game. Obviously, both the transition model $\mathcal{T}$ and the reward model $\mathcal{R}$ are not available, so the agents have to learn "along the way".
+
+In this paper we want to focus on comparison of different learning mechanism and what is their impact on the performance of a single agent. Let agent $i$ has won $w_{i}(t)$ and lost $l_{i}(t)$, $w_{i}(t)+l_{i}(t)=t$, then its performance at time $t$is defined as:
+
+\begin{equation}
+p_{i}(t) = w_{i}(t)-l_{i}(t).
+\end{equation}
+
+\subsection{Original Learning Mechanism}\label{subsec:original}
+
+The original learning mechanism is based on giving strategies scores which will be updated as the game progresses, in other words, if the strategy was successful during the recent round, then its score is increased, and vice versa. The update rule of the score for strategy $\pi$ denoted as $R^{\,\pi}$ is defined as follows:
+
+\begin{equation} \label{eq:mg_score_upd}
+R^{\,\pi}(t+1) = R^{\,\pi}(t)-\delta_{\mu(t),j}\cdot\pi(\mu(t))\cdot g\big(A(t)\big)
+\end{equation}
+
+\noindent
+where $\delta$ stands for Kronecker delta and $g$ is any odd function with respect to total action $A(t)$.\footnote{Here for simplicity $g(\cdot)=\text{sign}(\cdot)$.} 
+
+At each game round agents choose the best scoring strategy from the ones available for them:
+
+\begin{equation}
+\pi_{i}^{\text{opt}} = \arg \max_{\pi\in\mathcal{P}_{i}} R(t).
+\end{equation}
+
+The strategy score can be in some sense interpreted as the reward function, but such an assumption is a bit misleading. 
+
+\subsection{Q-learning Mechanism}\label{subsec:q}
+
+The Q-learning approach is based on the update of Q-function which is an expected total reward from taking action $a\in\mathcal{A}$ at state $s\in\mathcal{S}$. Its update rule is defined as:
+
+\begin{equation}
+Q_{i}(s,a)\leftarrow(1-\alpha)\cdot Q_{i}(s,a)+\alpha\cdot\big(r(s)+\gamma\cdot\max_{a'}Q_{i}(s',a')\big)
+\end{equation}
+
+\noindent
+where $s'$ is the next state, $\alpha$ is a learning parameter, $\gamma$ is a discount factor and $r$ is an immediate reward at state $s$.
+
+Let $\mathcal{S}=\{\pi: \pi \text{ is a strategy}\}$, the set of possible actions will be defined as $\mathcal{A}=\{$switch from using strategy $\pi$ to $\tilde{\pi}$ : $\pi,\tilde{\pi}$ are strategies $\}$. Now Q-learning may be applied on the minority game. The action-state function denoted as $Q_{i,\pi,\tilde{\pi}}$ has the following meaning:
+
+\begin{itemize}
+\item If $\pi=\tilde{\pi}$, then the agent will not change his current strategy to another one;
+\item If $\pi\neq\tilde{\pi}$, then the agent will switch from strategy $\pi$ to $\tilde{\pi}$.
+\end{itemize}
+
+Agent $i\in\{1,2,\dots,N\}$ will choose its optimal strategy at each time step by the $\epsilon$-greedy rule\footnote{Strategy $\pi_{i}^{\text{opt}}$ will be chosen with probability $1-\epsilon$.}
+
+\begin{equation}
+\pi_{i}^{\text{opt}} = \arg \max_{\tilde{\pi}\in\mathcal{P}_{i}} Q_{i,\pi,\tilde{\pi}}.
+\end{equation}
+
+
+Action-state function update rule which has to be evaluated at each game round will take form:
+
+\begin{equation}
+Q_{i,\pi,\tilde{\pi}}\leftarrow (1-\alpha)\cdot Q_{i,\pi,\tilde{\pi}}+\alpha\cdot\big(r(\pi)+\gamma\cdot\max_{\pi'}Q_{i,\pi,\pi'}\big)
+\end{equation}
+
+\noindent
+where after using the strategy $\pi$ agent's immediate reward is $r(\pi)=-\pi_{i}(\mu(t))\cdot A(t)$. That means, in case $\pi$ was successful it will be rewarded by $\arrowvert A(t)\arrowvert$  and $-\arrowvert A(t)\arrowvert$ in the opposite case.
+
+\subsection{Roth-Erev Learning Mechanism}\label{subsec:rerl}
+
+Roth-Erev reinforcement learning is completely different from the techniques discussed in subsections \ref{subsec:original} and \ref{subsec:q}. Here agents are not strategies according to the original model, decision making is based on \textit{propensities} and their update rule. Although the state space $\mathcal{S}$ and the set of possible actions $\mathcal{A}$ are the same as in the subsection \ref{subsec:original}, the learning mechanism is as follows \cite{WHITEHEAD2008}:
+
+\begin{itemize}
+
+		\item Agent $i\in\{1,2,\dots,N\}$ has a propensity $q_{i}^{\,a}(t)$ to play action $a$, $\forall a\in\mathcal{A}$. Propensities are required to meet the condition $q>0$ and they have to stay positive\footnote{That can be achieved by defining a positive payoff function.};
+		\item Let $(y_{i}(t), 1-y_{i}(t))$ represent agent's strategy at time $t$ which means, that he will take action $-1$ with probability $y_{i}(t)$, hence, the action $+1$ will be taken with probability $1-y_{i}(t)$. These probabilities are defined by a simple relation:
+		
+\begin{equation}
+y_{i}(t)=Pr(\mathit{a}=+1)=\frac{q_{i}^{\mathit{+1}}(t)}{q_{i}^{+1}(t)+q_{i}^{-1}(t)}.
+\end{equation}
+
+		It is simple to deduce, that $Pr(\mathit{a}=-1)=1-y_{i}(t)$.
+		
+		\item Propensity is updated only if the taken action was successful\footnote{In the original text \cite{WHITEHEAD2008} the update is given as some general function. The following update was proposed to perform simulations.}:
+		
+\begin{equation}
+q_{i}^{\mathit{a}}(t+1) \leftarrow q_{i}^{\mathit{a}}(t) + \frac{|A(t)|}{N}.
+\end{equation}
+\end{itemize}
+
+\section{Simulations}
+
 
 \newpage{}
 
