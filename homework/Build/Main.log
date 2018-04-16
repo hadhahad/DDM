@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.11)  16 APR 2018 01:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.11)  16 APR 2018 17:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -849,29 +849,32 @@ File: omstxr.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `OMS/txr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/txsy/m/n' tried instead on input line 132.
- [1] (Build/Main.bbl)
-[2] (Build/Main.aux) ) 
+ [1] [2] (Build/Main.bbl
+
+LaTeX Warning: Empty `thebibliography' environment on input line 3.
+
+) [3] (Build/Main.aux) ) 
 Here is how much of TeX's memory you used:
- 5246 strings out of 493029
- 66320 string characters out of 6136233
- 136766 words of memory out of 5000000
- 8585 multiletter control sequences out of 15000+600000
- 67674 words of font info for 94 fonts, out of 8000000 for 9000
+ 5294 strings out of 493029
+ 66901 string characters out of 6136233
+ 141758 words of memory out of 5000000
+ 8622 multiletter control sequences out of 15000+600000
+ 92129 words of font info for 142 fonts, out of 8000000 for 9000
  1152 hyphenation exceptions out of 8191
- 38i,4n,26p,639b,180s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.en
-c}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></hom
-e/hadhahad/texmf/fonts/type1/public/txfonts/rtxmi.pfb></home/hadhahad/texmf/fon
-ts/type1/public/txfonts/rtxr.pfb></home/hadhahad/texmf/fonts/type1/public/txfon
-ts/rtxsc.pfb></home/hadhahad/texmf/fonts/type1/public/txfonts/txex.pfb></home/h
-adhahad/texmf/fonts/type1/public/txfonts/txsy.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
-rw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8
-a.pfb>
-Output written on Build/Main.pdf (3 pages, 59910 bytes).
+ 38i,10n,26p,694b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.
+enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></h
+ome/hadhahad/texmf/fonts/type1/public/txfonts/rtxmi.pfb></home/hadhahad/texmf/f
+onts/type1/public/txfonts/rtxr.pfb></home/hadhahad/texmf/fonts/type1/public/txf
+onts/rtxsc.pfb></home/hadhahad/texmf/fonts/type1/public/txfonts/txex.pfb></home
+/hadhahad/texmf/fonts/type1/public/txfonts/txsy.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Build/Main.pdf (4 pages, 71233 bytes).
 PDF statistics:
- 51 PDF objects out of 1000 (max. 8388607)
- 36 compressed objects within 1 object stream
+ 58 PDF objects out of 1000 (max. 8388607)
+ 41 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

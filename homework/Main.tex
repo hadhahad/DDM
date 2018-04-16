@@ -129,17 +129,60 @@ which is basically the sum of actions performed by every agent at a given game r
 After each game round the outcome is disclosed to each of the agents: as soon as the round is finished, everyone gets to know what the winning action was. This action $W(t+1)$ ($t+1$ is used to specify, that this information is available at a time step $t+1$) is determined by a simple rule:
 
 \begin{itemize}
-\item $A(t)>0$ $\implies$ the action $-1$ was victorious;
-\item $A(t)<0$ $\implies$ the action $+1$ was victorious;
-\item $A(t)=0$ will never occur due to the oddness of $N$.
+\item $A(t)>0$ $\implies$ the action $-1$ was victorious, $W(t+1)=-1$;
+\item $A(t)<0$ $\implies$ the action $+1$ was victorious, $W(t+1)=1$;
+\item $A(t)=0$ will never occur due to oddness of $N$.
 \end{itemize} 
 
+\noindent
+In other words, $W(t+1) = -\text{sign}\big(A(t)\big)$.
 
-Strategies, memory
+\medskip
+
+Minority  Game is a system of agents with bounded memory: each agent remembers $m\in\{1,2,\dots\}$ recent game outcomes. In accordance with its memory. This \textit{recent history} can be represented two different ways:
+
+\begin{itemize}
+	\item As an $m$-tuple of most recent game outcomes: $\bar{\mu}(t)=(W(t-m+1),W(t-m+2),\dots,W(t))$;
+	\item As a single decimal number $\mu(t)$ with binary representation equal to $\bar{\mu}(t)$.\footnote{E.g.: let $m=3$, then for $\bar{\mu}(t)=(-1,-1,1)$ its decimal representation (obtained by applying the transformation $-1\rightarrow 0$) is $\mu(t)=1$, because $001_{2}=1_{10}$.}
+\end{itemize} 
+
+\noindent
+It can be easily seen, that in total $2^{m}$ possible recent histories exist, therefore, $\mu(t)\in\{1,2,\dots,2^{m}-1\}$.
+
+\medskip
+
+At the beginning of the game each agent gets a fixed number of strategies. For any fixed $m$ a \textit{strategy} is a mapping $\pi:(0,1,\dots,2^m-1)\mapsto\{-1,1\}^{2^{m}}$ (all possible outcomes are mapped to respective actions, e.g. see Table~\ref{tab:strategy_table_example}). The construction of such mapping implies, that agents are able to get from $0$ to $2^{2^{m}}$ strategies. The action/decision of agent $i$ with respect to recent history $\mu(t)$ using the strategy $\pi$ will be denoted as $\pi_{i}(\mu(t))$, e.g. if agent $i$ uses the strategy from Table~\ref{tab:strategy_table_example} when recent history is $101$, then $\pi_{i}(5)= -1$.
+
+\begin{table}
+	\centering
+	\begin{tabular}{|c|c||c|}
+		\hline
+		Recent History, $\bar{\mu}(t)$ & $\mu(t)$ & Action/Decision \\
+		\hline
+		\hline 
+		$0 0 0$ & 0 & $-1$ \\ 
+		$0 0 1$ & 1 & $+1$ \\ 
+		$0 1 0$ & 2 & $+1$ \\ 
+		$0 1 1$ & 3 & $-1$ \\ 
+		$1 0 0$ & 4 & $+1$ \\ 
+		$1 0 1$ & 5 & $-1$ \\ 
+		$1 1 0$ & 6 & $+1$ \\ 
+		$1 1 1$ & 7 & $+1$ \\
+		\hline
+	\end{tabular} 
+	\caption{Strategy example for $m=3$.} 
+	\label{tab:strategy_table_example}
+\end{table}
+
+Not the question arises: how to model the process of decision making? In the following section we will discuss the original learning mechanism and some other.
+
+\section{Learning in the Minority Game}
+
+To begin, we will try to describe the Minority Game in a more formal way. 
 
 \newpage{}
 
-\bibliography{bib/Benes2017,bib/MMC}
+\bibliography{}
 
 %\bibliographystyle{plain}
 \bibliographystyle{alpha}
