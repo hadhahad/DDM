@@ -1,3 +1,42 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{CMZ05}
+
+\bibitem[AA02]{ANDRECUT2002}
+M~Andrecut and M~Ali.
+\newblock Q learning in the minority game.
+\newblock 64:067103, 01 2002.
+
+\bibitem[Art94]{ARTHUR1994}
+W.~B. Arthur.
+\newblock Inductive reasoning and bounded rationality.
+\newblock {\em The American Economic Review}, 84(2):406--411, 1994.
+
+\bibitem[CMZ05]{CHALLET2005}
+D.~Challet, M.~Marsili, and Y.-C. Zhang.
+\newblock {\em Minority Games}.
+\newblock Oxford finance. Oxford University Press, 2005.
+
+\bibitem[CZ97]{CHALLET1997}
+D.~Challet and Y.-C. Zhang.
+\newblock Emergence of cooperation and organization in an evolutionary game.
+\newblock {\em Physica A: Statistical Mechanics and its Applications},
+  246(3):407 -- 418, 1997.
+
+\bibitem[JJH03]{JOHNSON2003}
+N.~F Johnson, P.~Jefferies, and P.~M. Hui.
+\newblock {\em Financial market complexity}.
+\newblock Oxford ; New York : Oxford University Press, 2003.
+
+\bibitem[Mor04]{MORO2004}
+E.~Moro.
+\newblock {The Minority Game: an introductory guide}.
+\newblock {\em Advances in Condensed Matter and Statistical Physics},
+  154(3):477+, January 2004.
+
+\bibitem[Whi08]{WHITEHEAD2008}
+Duncan Whitehead.
+\newblock The el farol bar problem revisited: Reinforcement learning in a
+  potential game.
+\newblock Ese discussion papers, Edinburgh School of Economics, University of
+  Edinburgh, 2008.
 
 \end{thebibliography}
